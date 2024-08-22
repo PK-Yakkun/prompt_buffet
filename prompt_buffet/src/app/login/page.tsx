@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { login, logout } from "@/lib/auth";
 import { User } from "firebase/auth";
 
@@ -26,6 +26,10 @@ export default function LoginPage() {
       console.error("Logout failed:", error);
     }
   };
+
+  useEffect(() => {
+    handleLogout();
+  }, []);
 
   return (
     <div>

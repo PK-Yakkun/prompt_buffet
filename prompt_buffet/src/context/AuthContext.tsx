@@ -1,4 +1,3 @@
-// context/AuthContext.tsx
 "use client";
 
 import {
@@ -8,6 +7,7 @@ import {
   useState,
   ReactNode,
 } from "react";
+import { useRouter } from "next/navigation";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { login as firebaseLogin, logout as firebaseLogout } from "../lib/auth";
@@ -24,19 +24,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
+
+      if (user) {
+        router.push("/");
+      }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const login = async () => {
     try {
       await firebaseLogin();
+      router.push("/");
     } catch (error) {
       console.error("Login failed:", error);
     }
