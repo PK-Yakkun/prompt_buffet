@@ -1,5 +1,6 @@
 import "./globals.css";
 import { KumaRegistry } from "@kuma-ui/next-plugin/registry";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function RootLayout({
   children,
@@ -9,7 +10,9 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <KumaRegistry>{children}</KumaRegistry>
+        <AuthProvider>
+          <KumaRegistry>{children}</KumaRegistry>
+        </AuthProvider>
       </body>
     </html>
   );
