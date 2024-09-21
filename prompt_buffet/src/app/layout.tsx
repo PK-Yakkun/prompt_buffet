@@ -1,6 +1,9 @@
-import "./globals.css";
-import { KumaRegistry } from "@kuma-ui/next-plugin/registry";
-import { AuthProvider } from "@/context/AuthContext";
+import '../styles/globals.css';
+
+export const metadata = {
+  title: 'Prompt Buffet',
+  description: '画像生成用のプロンプトを簡単に構成・コピーできます。',
+};
 
 export default function RootLayout({
   children,
@@ -8,12 +11,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body>
-        <AuthProvider>
-          <KumaRegistry>{children}</KumaRegistry>
-        </AuthProvider>
-      </body>
+    <html lang="ja">
+      <head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
