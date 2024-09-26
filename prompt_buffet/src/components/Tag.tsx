@@ -1,26 +1,27 @@
 import React from 'react';
+import { Word } from '../app/page';
 
-type TagProps = {
-  word: string;
+type TagProps = Word & {
   isSelected: boolean;
-  onClick: (word: string) => void;
-  onRemove: (word: string) => void;
+  onClick: () => void;
+  onRemove: () => void;
 };
 
-const Tag: React.FC<TagProps> = ({ word, isSelected, onClick, onRemove }) => {
+const Tag: React.FC<TagProps> = ({ value, label, category, isSelected, onClick, onRemove }) => {
   return (
-    <span
-      className={`cursor-pointer px-3 py-1 m-1 rounded-full inline-flex items-center ${
-        isSelected ? 'bg-blue-500 text-white' : 'bg-gray-200'
+    <span 
+      className={`inline-block rounded-full px-4 py-2 text-sm font-semibold mr-2 mb-2 cursor-pointer transition duration-300 ${
+        isSelected ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
       }`}
+      onClick={onClick}
     >
-      <span onClick={() => onClick(word)}>{word}</span>
-      <button
+      {label}
+      <button 
+        className="ml-2 text-red-500 hover:text-red-700 transition duration-300"
         onClick={(e) => {
           e.stopPropagation();
-          onRemove(word);
+          onRemove();
         }}
-        className="ml-2 text-sm"
       >
         ×
       </button>

@@ -1,28 +1,31 @@
 import React from 'react';
 import Tag from './Tag';
+import { Word } from '../app/page';
 
 type TagListProps = {
-  words: string[];
+  words: Word[];
   selectedWords: Set<string>;
-  onTagClick: (word: string) => void;
-  onRemoveWord: (word: string) => void;
+  onWordSelect: (word: Word) => void;
+  onWordRemove: (wordToRemove: string) => void;
 };
 
 const TagList: React.FC<TagListProps> = ({
   words,
   selectedWords,
-  onTagClick,
-  onRemoveWord,
+  onWordSelect,
+  onWordRemove,
 }) => {
   return (
     <div>
       {words.map((word) => (
         <Tag
-          key={word}
-          word={word}
-          isSelected={selectedWords.has(word)}
-          onClick={onTagClick}
-          onRemove={onRemoveWord}
+          key={word.value}
+          value={word.value}
+          label={word.label}
+          category={word.category}
+          isSelected={selectedWords.has(word.value)}
+          onClick={() => onWordSelect(word)}
+          onRemove={() => onWordRemove(word.value)}
         />
       ))}
     </div>

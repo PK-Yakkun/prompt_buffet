@@ -15,7 +15,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
     }
   };
 
-  return <Button onClick={handleCopy}>コピー</Button>;
+  return <Button onClick={handleCopy} className="bg-purple-600 hover:bg-purple-700 transition duration-300">コピー</Button>;
 };
 
 export default CopyButton;
