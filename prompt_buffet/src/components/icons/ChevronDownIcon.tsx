@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ChevronDown: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const ChevronDownIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -17,4 +17,4 @@ const ChevronDown: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
-export default ChevronDown;
+export default ChevronDownIcon;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ArrowsUpDown: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const ArrowsUpDownIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -17,4 +17,4 @@ const ArrowsUpDown: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
-export default ArrowsUpDown;
+export default ArrowsUpDownIcon;
