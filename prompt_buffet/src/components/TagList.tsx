@@ -2,30 +2,40 @@ import React from 'react';
 import Tag from './Tag';
 import { Word } from '../app/page';
 
-type TagListProps = {
+interface TagListProps {
   words: Word[];
   selectedWords: Set<string>;
   onWordSelect: (word: Word) => void;
-  onWordRemove: (wordToRemove: string) => void;
-};
+  onWordRemove: (value: string) => void;
+  deleteMode: boolean;
+  weighting: boolean;
+  onWeightIncrease: (value: string) => void;
+  onWeightDecrease: (value: string) => void;
+}
 
 const TagList: React.FC<TagListProps> = ({
   words,
   selectedWords,
   onWordSelect,
   onWordRemove,
+  deleteMode,
+  weighting,
+  onWeightIncrease,
+  onWeightDecrease
 }) => {
   return (
-    <div>
+    <div className="flex flex-wrap gap-2">
       {words.map((word) => (
         <Tag
           key={word.value}
-          value={word.value}
-          label={word.label}
-          category={word.category}
+          word={word}
           isSelected={selectedWords.has(word.value)}
-          onClick={() => onWordSelect(word)}
+          onSelect={() => onWordSelect(word)}
           onRemove={() => onWordRemove(word.value)}
+          deleteMode={deleteMode}
+          weighting={weighting}
+          onWeightIncrease={() => onWeightIncrease(word.value)}
+          onWeightDecrease={() => onWeightDecrease(word.value)}
         />
       ))}
     </div>

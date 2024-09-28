@@ -1,9 +1,9 @@
 import React from 'react';
-import Button from './Button';
+import CopyIcon from './icons/CopyIcon';
 
-type CopyButtonProps = {
+interface CopyButtonProps {
   textToCopy: string;
-};
+}
 
 const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
   const handleCopy = async () => {
@@ -15,7 +15,14 @@ const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
     }
   };
 
-  return <Button onClick={handleCopy} className="bg-purple-600 hover:bg-purple-700 transition duration-300">コピー</Button>;
+  return (
+    <button
+      onClick={handleCopy}
+      className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300 flex items-center"
+    >
+      <CopyIcon className="w-5 h-5" />
+    </button>
+  );
 };
 
 export default CopyButton;

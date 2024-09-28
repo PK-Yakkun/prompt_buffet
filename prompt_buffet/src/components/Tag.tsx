@@ -1,31 +1,67 @@
 import React from 'react';
 import { Word } from '../app/page';
+import DeleteIcon from './icons/DeleteIcon';
+import ChevronUpIcon from './icons/ChevronUpIcon';
+import ChevronDownIcon from './icons/ChevronDownIcon';
+import CrossIcon from './icons/CrossIcon';
 
-type TagProps = Word & {
+interface TagProps {
+  word: Word;
   isSelected: boolean;
-  onClick: () => void;
+  onSelect: () => void;
   onRemove: () => void;
-};
+  deleteMode: boolean;
+  weighting: boolean;
+  onWeightIncrease: () => void;
+  onWeightDecrease: () => void;
+}
 
-const Tag: React.FC<TagProps> = ({ value, label, category, isSelected, onClick, onRemove }) => {
+const Tag: React.FC<TagProps> = ({
+  word,
+  isSelected,
+  onSelect,
+  onRemove,
+  deleteMode,
+  weighting,
+  onWeightIncrease,
+  onWeightDecrease
+}) => {
   return (
-    <span 
-      className={`inline-block rounded-full px-4 py-2 text-sm font-semibold mr-2 mb-2 cursor-pointer transition duration-300 ${
-        isSelected ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+    <div
+      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold mr-2 mb-2 cursor-pointer ${
+        isSelected ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
       }`}
-      onClick={onClick}
+      onClick={onSelect}
     >
-      {label}
-      <button 
-        className="ml-2 text-red-500 hover:text-red-700 transition duration-300"
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove();
-        }}
-      >
-        ×
-      </button>
-    </span>
+      {weighting && (
+        <ChevronUpIcon
+          className="w-3 h-3 mr-1 cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            onWeightIncrease();
+          }}
+        />
+      )}
+      {word.label}
+      {deleteMode && (
+        <CrossIcon
+          className="w-3 h-3 ml-1 cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+        />
+      )}
+      {weighting && (
+        <ChevronDownIcon
+          className="w-3 h-3 ml-1 cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            onWeightDecrease();
+          }}
+        />
+      )}
+    </div>
   );
 };
 

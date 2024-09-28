@@ -5,6 +5,9 @@ import TagList from '../components/TagList';
 import TextArea from '../components/TextArea';
 import CopyButton from '../components/CopyButton';
 import Select from '../components/Select';
+import Toggle from '@/components/Toggle';
+import DeleteIcon from '@/components/icons/DeleteIcon';
+import ArrowsUpDown from '@/components/icons/ArrowsUpDownIcon';
 
 export type WordCategory = '背景' | 'カメラ・アングル' | '画質' | '表情' | 'ポーズ' | '服装' | 'その他';
 
@@ -12,6 +15,7 @@ export interface Word {
   value: string;
   label: string;
   category: WordCategory;
+  weight?: number;
 }
 
 const defaultWords: Word[] = [
@@ -30,14 +34,15 @@ const defaultWords: Word[] = [
 
 const defaultCategories: WordCategory[] = ['背景', 'カメラ・アングル', '画質', '表情', 'ポーズ', '服装', 'その他'];
 
-const categories = ['自然', '都市', '時間'];
-
 const Page: React.FC = () => {
   const [words, setWords] = useState<Word[]>(defaultWords);
   const [selectedWords, setSelectedWords] = useState<Word[]>([]);
   const [newWordValue, setNewWordValue] = useState<string>('');
   const [newWordLabel, setNewWordLabel] = useState<string>('');
   const [newWordCategory, setNewWordCategory] = useState<WordCategory>('背景');
+  const [weighting, setWeighting] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false);
+  const [isFeatureEnabled, setIsFeatureEnabled] = useState(false);
 
   useEffect(() => {
     const savedWords = localStorage.getItem('customWords');
@@ -69,6 +74,11 @@ const Page: React.FC = () => {
     }
   };
 
+  const handleToggle = () => {
+    setIsFeatureEnabled(prev => !prev);
+    // ここで他の必要な処理を行うことができます
+  };
+
   const handleRemoveWord = (wordToRemove: string) => {
     const updatedWords = words.filter(word => word.value !== wordToRemove);
     setWords(updatedWords);
@@ -76,7 +86,46 @@ const Page: React.FC = () => {
     setSelectedWords(prev => prev.filter(word => word.value !== wordToRemove));
   };
 
-  const textAreaValue = selectedWords.map(word => word.value).join(', ');
+  const handleWeightIncrease = (value: string) => {
+    setSelectedWords((prev) => {
+      return prev.map((word) => {
+        if (word.value === value) {
+          const newWeight = (word.weight || 0) + 1;
+          return { ...word, weight: Math.min(newWeight, 5) };
+        }
+        return word;
+      });
+    });
+  };
+
+  const handleWeightDecrease = (value: string) => {
+    setSelectedWords((prev) => {
+      return prev.map((word) => {
+        if (word.value === value) {
+          const newWeight = (word.weight || 0) - 1;
+          return { ...word, weight: Math.max(newWeight, 0) };
+        }
+        return word;
+      });
+    });
+  };
+
+  const textAreaValue = selectedWords
+    .map((word) => {
+      const weight = word.weight || 0;
+      return '('.repeat(weight) + word.value + ')'.repeat(weight);
+    })
+    .join(', ');
+
+  const handleWeightingToggle = () => {
+    setWeighting(prev => !prev);
+    if (deleteMode) setDeleteMode(false);
+  };
+
+  const handleDeleteModeToggle = () => {
+    setDeleteMode(prev => !prev);
+    if (weighting) setWeighting(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -92,11 +141,29 @@ const Page: React.FC = () => {
         <div className="flex justify-end mb-6">
           <CopyButton textToCopy={textAreaValue} />
         </div>
+        <div className="flex justify-end mb-6">
+          <ArrowsUpDown className="w-5 h-5"/>
+          <Toggle
+            label="重み付けモード"
+            isOn={weighting}
+            onToggle={handleWeightingToggle}
+          />
+          <Toggle
+            label="削除モード"
+            isOn={deleteMode}
+            onToggle={handleDeleteModeToggle}
+          />
+        </div>
+        
         <TagList
           words={words}
           selectedWords={new Set(selectedWords.map(word => word.value))}
           onWordSelect={handleTagClick}
           onWordRemove={handleRemoveWord}
+          deleteMode={deleteMode}
+          weighting={weighting}
+          onWeightIncrease={handleWeightIncrease}
+          onWeightDecrease={handleWeightDecrease}
         />
         <div className="mt-8">
           <input
