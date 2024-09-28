@@ -3,9 +3,10 @@ import CopyIcon from './icons/CopyIcon';
 
 interface CopyButtonProps {
   textToCopy: string;
+  className?: string;
 }
 
-const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
+const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy, className }) => {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(textToCopy);
@@ -18,7 +19,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
   return (
     <button
       onClick={handleCopy}
-      className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300 flex items-center"
+      className={`bg-[var(--accent-blue)] text-white px-4 py-2 rounded-lg hover:bg-[#2563eb] transition duration-300 flex items-center ${className || ''}`}
     >
       <CopyIcon className="w-5 h-5" />
     </button>

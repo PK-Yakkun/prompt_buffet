@@ -6,8 +6,9 @@ import TextArea from '../components/TextArea';
 import CopyButton from '../components/CopyButton';
 import Select from '../components/Select';
 import Toggle from '@/components/Toggle';
-import DeleteIcon from '@/components/icons/DeleteIcon';
 import ArrowsUpDown from '@/components/icons/ArrowsUpDownIcon';
+import Divider from '@/components/Divider';
+import DeleteIcon from '@/components/icons/DeleteIcon';
 
 export type WordCategory = '背景' | 'カメラ・アングル' | '画質' | '表情' | 'ポーズ' | '服装' | 'その他';
 
@@ -42,8 +43,14 @@ const Page: React.FC = () => {
   const [newWordCategory, setNewWordCategory] = useState<WordCategory>('背景');
   const [weighting, setWeighting] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
-  const [isFeatureEnabled, setIsFeatureEnabled] = useState(false);
 
+
+  const textAreaValue = selectedWords
+    .map((word) => {
+      const weight = word.weight || 0;
+      return '('.repeat(weight) + word.value + ')'.repeat(weight);
+    })
+    .join(', ');
   useEffect(() => {
     const savedWords = localStorage.getItem('customWords');
     if (savedWords) {
@@ -72,11 +79,6 @@ const Page: React.FC = () => {
       setNewWordLabel('');
       setNewWordCategory('背景');
     }
-  };
-
-  const handleToggle = () => {
-    setIsFeatureEnabled(prev => !prev);
-    // ここで他の必要な処理を行うことができます
   };
 
   const handleRemoveWord = (wordToRemove: string) => {
@@ -110,13 +112,6 @@ const Page: React.FC = () => {
     });
   };
 
-  const textAreaValue = selectedWords
-    .map((word) => {
-      const weight = word.weight || 0;
-      return '('.repeat(weight) + word.value + ')'.repeat(weight);
-    })
-    .join(', ');
-
   const handleWeightingToggle = () => {
     setWeighting(prev => !prev);
     if (deleteMode) setDeleteMode(false);
@@ -128,66 +123,77 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
+    <div className="h-screen bg-white flex items-center justify-center">
+      <div className="w-[1000px] h-full flex flex-col p-8">
         <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8">Prompt Buffet</h1>
-        <div className="mb-6">
-          <TextArea
-            value={textAreaValue}
-            readOnly
-            className="w-full h-32 border-2 border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-          />
-        </div>
-        <div className="flex justify-end mb-6">
-          <CopyButton textToCopy={textAreaValue} />
-        </div>
-        <div className="flex justify-end mb-6">
-          <ArrowsUpDown className="w-5 h-5"/>
-          <Toggle
-            label="重み付けモード"
-            isOn={weighting}
-            onToggle={handleWeightingToggle}
-          />
-          <Toggle
-            label="削除モード"
-            isOn={deleteMode}
-            onToggle={handleDeleteModeToggle}
-          />
-        </div>
-        
-        <TagList
-          words={words}
-          selectedWords={new Set(selectedWords.map(word => word.value))}
-          onWordSelect={handleTagClick}
-          onWordRemove={handleRemoveWord}
-          deleteMode={deleteMode}
-          weighting={weighting}
-          onWeightIncrease={handleWeightIncrease}
-          onWeightDecrease={handleWeightDecrease}
-        />
-        <div className="mt-8">
-          <input
-            type="text"
-            value={newWordValue}
-            onChange={(e) => setNewWordValue(e.target.value)}
-            placeholder="新しい単語の値"
-            className="mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-          />
-          <input
-            type="text"
-            value={newWordLabel}
-            onChange={(e) => setNewWordLabel(e.target.value)}
-            placeholder="新しい単語のラベル"
-            className="mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-          />
-          <Select
-            options={defaultCategories}
-            value={newWordCategory}
-            onChange={(value) => setNewWordCategory(value as WordCategory)}
-          />
-          <button onClick={handleAddWord} className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
-            追加
-          </button>
+        <div className="flex-grow flex flex-col overflow-hidden">
+          <div className="mb-4">
+            <TextArea
+              value={textAreaValue}
+              readOnly
+              tabIndex={-1}
+              className="w-full h-[240px] border-2 border-gray-300 rounded-lg p-4 focus:outline-none overflow-y-auto custom-scrollbar resize-none"
+            />
+          </div>
+          <div className="flex justify-end mb-4">
+            <CopyButton textToCopy={textAreaValue} />
+          </div>
+          <div className="flex justify-end items-center gap-4 mb-4">
+            <div className="flex items-center gap-1">
+              <ArrowsUpDown className="w-5 h-5"/>
+              <Toggle
+                label=""
+                isOn={weighting}
+                onToggle={handleWeightingToggle}
+              />
+            </div>
+            <div className="flex items-center gap-1">
+              <DeleteIcon className="w-5 h-5"/>
+              <Toggle
+                label=""
+                isOn={deleteMode}
+                onToggle={handleDeleteModeToggle}
+              />
+            </div>
+          </div>
+          
+          <div className="flex-grow overflow-y-auto custom-scrollbar">
+            <TagList
+              words={words}
+              selectedWords={new Set(selectedWords.map(word => word.value))}
+              onWordSelect={handleTagClick}
+              onWordRemove={handleRemoveWord}
+              deleteMode={deleteMode}
+              weighting={weighting}
+              onWeightIncrease={handleWeightIncrease}
+              onWeightDecrease={handleWeightDecrease}
+            />
+          </div>
+          <Divider className="my-4" />
+          <div className="mt-4 flex items-center space-x-2">
+            <input
+              type="text"
+              value={newWordValue}
+              onChange={(e) => setNewWordValue(e.target.value)}
+              placeholder="新しい単語の値"
+              className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-300"
+            />
+            <input
+              type="text"
+              value={newWordLabel}
+              onChange={(e) => setNewWordLabel(e.target.value)}
+              placeholder="新しい単語のラベル"
+              className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-300"
+            />
+            <Select
+              options={defaultCategories}
+              value={newWordCategory}
+              onChange={(value) => setNewWordCategory(value as WordCategory)}
+            />
+            <button onClick={handleAddWord} className="bg-[var(--accent-blue)] text-white px-6 py-2 rounded-lg hover:bg-[#2563eb] transition duration-300">
+              追加
+            </button>
+          </div>
         </div>
       </div>
     </div>

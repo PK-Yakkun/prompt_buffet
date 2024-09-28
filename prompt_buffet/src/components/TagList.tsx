@@ -24,7 +24,7 @@ const TagList: React.FC<TagListProps> = ({
   onWeightDecrease
 }) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1">
       {words.map((word) => (
         <Tag
           key={word.value}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Word } from '../app/page';
-import DeleteIcon from './icons/DeleteIcon';
 import ChevronUpIcon from './icons/ChevronUpIcon';
 import ChevronDownIcon from './icons/ChevronDownIcon';
 import CrossIcon from './icons/CrossIcon';
@@ -28,7 +27,7 @@ const Tag: React.FC<TagProps> = ({
 }) => {
   return (
     <div
-      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold mr-2 mb-2 cursor-pointer ${
+      className={`inline-flex items-center px-3 py-1 rounded-full text-sm mr-2 mb-2 cursor-pointer ${
         isSelected ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
       }`}
       onClick={onSelect}
@@ -42,7 +41,7 @@ const Tag: React.FC<TagProps> = ({
           }}
         />
       )}
-      {word.label}
+      {word.value}
       {deleteMode && (
         <CrossIcon
           className="w-3 h-3 ml-1 cursor-pointer"
