@@ -6,9 +6,14 @@ import TextArea from '../components/TextArea';
 import CopyButton from '../components/CopyButton';
 import Select from '../components/Select';
 import Toggle from '@/components/Toggle';
-import ArrowsUpDown from '@/components/icons/ArrowsUpDownIcon';
 import Divider from '@/components/Divider';
 import DeleteIcon from '@/components/icons/DeleteIcon';
+import PlusIcon from '@/components/icons/PlusIcon';
+import SaveIcon from '@/components/icons/SaveIcon';
+import LoadIcon from '@/components/icons/LoadIcon';
+import SaveButton from '@/components/SaveButton';
+import LoadButton from '@/components/LoadButton';
+import AdjustmentsIcon from '@/components/icons/AdjustmentsIcon';
 
 export type WordCategory = '背景' | 'カメラ・アングル' | '画質' | '表情' | 'ポーズ' | '服装' | 'その他';
 
@@ -51,6 +56,7 @@ const Page: React.FC = () => {
       return '('.repeat(weight) + word.value + ')'.repeat(weight);
     })
     .join(', ');
+
   useEffect(() => {
     const savedWords = localStorage.getItem('customWords');
     if (savedWords) {
@@ -122,12 +128,20 @@ const Page: React.FC = () => {
     if (weighting) setWeighting(false);
   };
 
+  const handleSave = () => {
+    console.log('save');
+  };
+
+  const handleLoad = () => {
+    console.log('load');
+  };
+
   return (
     <div className="h-screen bg-white flex items-center justify-center">
       <div className="w-[1000px] h-full flex flex-col p-8">
         <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8">Prompt Buffet</h1>
         <div className="flex-grow flex flex-col overflow-hidden">
-          <div className="mb-4">
+          <div className="mb-2">
             <TextArea
               value={textAreaValue}
               readOnly
@@ -135,12 +149,20 @@ const Page: React.FC = () => {
               className="w-full h-[240px] border-2 border-gray-300 rounded-lg p-4 focus:outline-none overflow-y-auto custom-scrollbar resize-none"
             />
           </div>
-          <div className="flex justify-end mb-4">
+          {/* <div className="flex justify-between">
+            <div className="flex items-center gap-3">
+              <SaveButton onClick={handleSave} />
+              <LoadButton onClick={handleLoad} />
+            </div>
+            <CopyButton textToCopy={textAreaValue} />
+          </div> */}
+          <div className="flex justify-end">
             <CopyButton textToCopy={textAreaValue} />
           </div>
+          <Divider className='my-4' />
           <div className="flex justify-end items-center gap-4 mb-4">
             <div className="flex items-center gap-1">
-              <ArrowsUpDown className="w-5 h-5"/>
+              <AdjustmentsIcon className="w-[22px] h-[22px]" />
               <Toggle
                 label=""
                 isOn={weighting}
@@ -170,28 +192,40 @@ const Page: React.FC = () => {
             />
           </div>
           <Divider className="my-4" />
-          <div className="mt-4 flex items-center space-x-2">
-            <input
-              type="text"
-              value={newWordValue}
-              onChange={(e) => setNewWordValue(e.target.value)}
-              placeholder="新しい単語の値"
-              className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-300"
-            />
-            <input
-              type="text"
-              value={newWordLabel}
-              onChange={(e) => setNewWordLabel(e.target.value)}
-              placeholder="新しい単語のラベル"
-              className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-300"
-            />
-            <Select
-              options={defaultCategories}
-              value={newWordCategory}
-              onChange={(value) => setNewWordCategory(value as WordCategory)}
-            />
-            <button onClick={handleAddWord} className="bg-[var(--accent-blue)] text-white px-6 py-2 rounded-lg hover:bg-[#2563eb] transition duration-300">
-              追加
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-1">
+                <span className="text-sm"><span className="text-red-500"> * </span>value</span>
+                <input
+                  type="text"
+                  value={newWordValue}
+                  onChange={(e) => setNewWordValue(e.target.value)}
+                  placeholder="e.g. sunset"
+                  className="flex-grow text-sm px-3 py-1 border border-gray-300 rounded-md focus:outline-none transition duration-300"
+                />
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-sm">label</span>
+                <input
+                  type="text"
+                  value={newWordLabel}
+                  onChange={(e) => setNewWordLabel(e.target.value)}
+                  placeholder="e.g. 夕日"
+                  className="flex-grow text-sm px-3 py-1 border border-gray-300 rounded-md focus:outline-none transition duration-300"
+                />
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-sm">category</span>
+                <Select
+                  options={defaultCategories}
+                  value={newWordCategory}
+                  onChange={(value) => setNewWordCategory(value as WordCategory)}
+                  className="w-[160px]"
+                />
+              </div>
+            </div>
+            <button onClick={handleAddWord} className="bg-[var(--accent-blue)] text-white text-sm px-4 py-[6px] rounded-md hover:bg-[#2563eb] transition duration-300">
+              <PlusIcon className="w-5 h-5" />
             </button>
           </div>
         </div>

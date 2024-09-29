@@ -5,14 +5,15 @@ type SelectProps = {
   options: WordCategory[];
   value: string;
   onChange: (value: string) => void;
+  className?: string;
 };
 
-const Select: React.FC<SelectProps> = ({ options, value, onChange }) => {
+const Select: React.FC<SelectProps> = ({ options, value, onChange, className }) => {
   return (
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="border rounded p-2"
+      className={`text-sm border border-gray-300 rounded-md p-[6px] ${className}`}
     >
       {options.map((option) => (
         <option key={option} value={option}>
