@@ -32,7 +32,7 @@ const Tag: React.FC<TagProps> = ({
       }`}
       onClick={onSelect}
     >
-      {weighting && (
+      {weighting && isSelected && (
         <ChevronUpIcon
           className="w-3 h-3 mr-1 cursor-pointer"
           onClick={(e) => {
@@ -51,7 +51,7 @@ const Tag: React.FC<TagProps> = ({
           }}
         />
       )}
-      {weighting && (
+      {weighting && isSelected && (
         <ChevronDownIcon
           className="w-3 h-3 ml-1 cursor-pointer"
           onClick={(e) => {
