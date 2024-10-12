@@ -5,10 +5,11 @@ import { Word } from '../app/page';
 interface TagListProps {
   words: Word[];
   selectedWords: Set<string>;
+  viewLabelMode: boolean;
+  deleteMode: boolean;
+  weightingMode: boolean;
   onWordSelect: (word: Word) => void;
   onWordRemove: (value: string) => void;
-  deleteMode: boolean;
-  weighting: boolean;
   onWeightIncrease: (value: string) => void;
   onWeightDecrease: (value: string) => void;
 }
@@ -16,10 +17,11 @@ interface TagListProps {
 const TagList: React.FC<TagListProps> = ({
   words,
   selectedWords,
+  viewLabelMode,
+  deleteMode,
+  weightingMode,
   onWordSelect,
   onWordRemove,
-  deleteMode,
-  weighting,
   onWeightIncrease,
   onWeightDecrease
 }) => {
@@ -32,8 +34,9 @@ const TagList: React.FC<TagListProps> = ({
           isSelected={selectedWords.has(word.value)}
           onSelect={() => onWordSelect(word)}
           onRemove={() => onWordRemove(word.value)}
+          viewLabelMode={viewLabelMode}
           deleteMode={deleteMode}
-          weighting={weighting}
+          weightingMode={weightingMode}
           onWeightIncrease={() => onWeightIncrease(word.value)}
           onWeightDecrease={() => onWeightDecrease(word.value)}
         />

@@ -14,6 +14,7 @@ import LoadIcon from '@/components/icons/LoadIcon';
 import SaveButton from '@/components/SaveButton';
 import LoadButton from '@/components/LoadButton';
 import AdjustmentsIcon from '@/components/icons/AdjustmentsIcon';
+import LanguageIcon from '@/components/icons/LanguageIcon';
 
 export type WordCategory = '背景' | 'カメラ・アングル' | '画質' | '表情' | 'ポーズ' | '服装' | 'その他';
 
@@ -46,7 +47,10 @@ const Page: React.FC = () => {
   const [newWordValue, setNewWordValue] = useState<string>('');
   const [newWordLabel, setNewWordLabel] = useState<string>('');
   const [newWordCategory, setNewWordCategory] = useState<WordCategory>('背景');
-  const [weighting, setWeighting] = useState(false);
+
+  // Toggle系State
+  const [viewLabelMode, setViewLabelMode] = useState(false)
+  const [weightingMode, setWeightingMode] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
 
 
@@ -118,14 +122,18 @@ const Page: React.FC = () => {
     });
   };
 
+  const handleLanguageToggle = () => {
+    setViewLabelMode(prev => !prev)
+  }
+
   const handleWeightingToggle = () => {
-    setWeighting(prev => !prev);
+    setWeightingMode(prev => !prev);
     if (deleteMode) setDeleteMode(false);
   };
 
   const handleDeleteModeToggle = () => {
     setDeleteMode(prev => !prev);
-    if (weighting) setWeighting(false);
+    if (weightingMode) setWeightingMode(false);
   };
 
   const handleSave = () => {
@@ -162,15 +170,25 @@ const Page: React.FC = () => {
           <Divider className='my-4' />
           <div className="flex justify-end items-center gap-4 mb-4">
             <div className="flex items-center gap-1">
+              <LanguageIcon className="w-[22px] h-[22px]" />
+              <Toggle
+                label=""
+                isOn={viewLabelMode}
+                onToggle={handleLanguageToggle}
+              />
+            </div>
+            <Divider orientation='vertical' className='my-4' />
+            <div className="flex items-center gap-1">
+
               <AdjustmentsIcon className="w-[22px] h-[22px]" />
               <Toggle
                 label=""
-                isOn={weighting}
+                isOn={weightingMode}
                 onToggle={handleWeightingToggle}
               />
             </div>
             <div className="flex items-center gap-1">
-              <DeleteIcon className="w-5 h-5"/>
+              <DeleteIcon className="w-[22px] h-[22px]"/>
               <Toggle
                 label=""
                 isOn={deleteMode}
@@ -185,8 +203,9 @@ const Page: React.FC = () => {
               selectedWords={new Set(selectedWords.map(word => word.value))}
               onWordSelect={handleTagClick}
               onWordRemove={handleRemoveWord}
+              viewLabelMode={viewLabelMode}
               deleteMode={deleteMode}
-              weighting={weighting}
+              weightingMode={weightingMode}
               onWeightIncrease={handleWeightIncrease}
               onWeightDecrease={handleWeightDecrease}
             />
@@ -220,7 +239,7 @@ const Page: React.FC = () => {
                   options={defaultCategories}
                   value={newWordCategory}
                   onChange={(value) => setNewWordCategory(value as WordCategory)}
-                  className="w-[160px]"
+                  className="w-[240px]"
                 />
               </div>
             </div>

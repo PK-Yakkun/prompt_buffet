@@ -7,10 +7,11 @@ import CrossIcon from './icons/CrossIcon';
 interface TagProps {
   word: Word;
   isSelected: boolean;
+  viewLabelMode: boolean;
+  deleteMode: boolean;
+  weightingMode: boolean;
   onSelect: () => void;
   onRemove: () => void;
-  deleteMode: boolean;
-  weighting: boolean;
   onWeightIncrease: () => void;
   onWeightDecrease: () => void;
 }
@@ -18,10 +19,11 @@ interface TagProps {
 const Tag: React.FC<TagProps> = ({
   word,
   isSelected,
+  viewLabelMode,
+  deleteMode,
+  weightingMode,
   onSelect,
   onRemove,
-  deleteMode,
-  weighting,
   onWeightIncrease,
   onWeightDecrease
 }) => {
@@ -32,7 +34,7 @@ const Tag: React.FC<TagProps> = ({
       }`}
       onClick={onSelect}
     >
-      {weighting && isSelected && (
+      {weightingMode && isSelected && (
         <ChevronUpIcon
           className="w-3 h-3 mr-1 cursor-pointer"
           onClick={(e) => {
@@ -41,7 +43,7 @@ const Tag: React.FC<TagProps> = ({
           }}
         />
       )}
-      {word.value}
+      { viewLabelMode ? word.label : word.value}
       {deleteMode && (
         <CrossIcon
           className="w-3 h-3 ml-1 cursor-pointer"
@@ -51,7 +53,7 @@ const Tag: React.FC<TagProps> = ({
           }}
         />
       )}
-      {weighting && isSelected && (
+      {weightingMode && isSelected && (
         <ChevronDownIcon
           className="w-3 h-3 ml-1 cursor-pointer"
           onClick={(e) => {
